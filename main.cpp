@@ -5,7 +5,11 @@
 #include <iostream>
 #include <vector>
 
-#include <find_local_peaks.cpp>
+//#include <count_more_than.cpp>
+//#include <diff.cpp>
+//#include <rectpulse.cpp>
+//#include <psk_mod.cpp>
+//#include <find_local_peaks.cpp>
 
 
 
@@ -23,10 +27,6 @@
 
 
 int main(){
-    std::vector<float> v_in = {1.f, 2.f, 3.1f, 4.f, 5.f, 6.3f, 7.f};
-
-    std::cout  << count_more_than(v_in, 4.1f);
-
 
     return EXIT_SUCCESS;
 }
