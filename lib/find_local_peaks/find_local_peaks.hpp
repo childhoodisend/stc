@@ -2,7 +2,8 @@
 // Created by artem on 10.03.2021.
 //
 
-#include "find_local_peaks.h"
+#ifndef STC_FIND_LOCAL_PEAKS_H
+#define STC_FIND_LOCAL_PEAKS_H
 
 #include <vector>
 #include <iostream>
@@ -14,15 +15,17 @@ void find_local_peaks(const std::vector<float>& v_in, std::vector<size_t>& idx_p
 /*
  * Проверки
  */
-    if (v_in.empty())
+    if (v_in.empty()) {
         throw std::runtime_error("input vector is empty!\n");
+    }
 
-    if(v_in.size() < 2 * len_win)
+    if(v_in.size() < 2 * len_win) {
         throw std::runtime_error("input vector less than 2 * len_win!\n");
+    }
 
-    if(len_win <= 0)
+    if(len_win <= 0) {
         throw std::invalid_argument("window length is <= 0!\n");
-
+    }
 
     bool flag = false;
     float maximum = std::numeric_limits<float>::min();
@@ -54,3 +57,5 @@ void find_local_peaks(const std::vector<float>& v_in, std::vector<size_t>& idx_p
         }
     }
 }
+
+#endif //STC_FIND_LOCAL_PEAKS_H

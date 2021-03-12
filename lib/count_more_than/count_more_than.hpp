@@ -2,7 +2,8 @@
 // Created by artem on 10.03.2021.
 //
 
-#include "count_more_than.h"
+#ifndef STC_COUNT_MORE_THAN_H
+#define STC_COUNT_MORE_THAN_H
 
 #include <vector>
 #include <iostream>
@@ -17,6 +18,10 @@ int count_more_than (const std::vector<T>& v_in, T val){
 
         return counter;
     }
-    else
+    else {
         throw std::runtime_error("input vector is empty!\n");
+    }
 }
+
+
+#endif //STC_COUNT_MORE_THAN_H

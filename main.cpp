@@ -5,12 +5,11 @@
 #include <iostream>
 #include <vector>
 
-//#include <count_more_than.cpp>
-//#include <diff.cpp>
-//#include <rectpulse.cpp>
-//#include <psk_mod.cpp>
-//#include <find_local_peaks.cpp>
-
+//#include <count_more_than/count_more_than.hpp>
+//#include <diff/diff.hpp>
+//#include <find_local_peaks/find_local_peaks.hpp>
+//#include <psk_mod/psk_mod.hpp>
+//#include <rectpulse/rectpulse.hpp>
 
 
 //template<typename T>
@@ -27,6 +26,8 @@
 
 
 int main(){
+
+
 
     return EXIT_SUCCESS;
 }
