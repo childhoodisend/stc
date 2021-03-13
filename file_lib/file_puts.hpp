@@ -85,10 +85,11 @@ namespace file {
         }
     }
 
-    void binout(const std::vector<float> &src, const std::string &file_output) {
+    template<typename T>
+    void binout(const std::vector<T> &src, const std::string &file_output) {
         std::ofstream fout(file_output, std::ios_base::binary | std::ios_base::out);
         if (fout) {
-            for (auto i : src) {
+            for (const auto& i : src) {
                 fout.write((char *) &i, sizeof(i));
             }
             fout.close();
