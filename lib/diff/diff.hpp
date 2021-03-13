@@ -23,7 +23,7 @@ void diff(const std::vector<T> &v_in, std::vector<T> &v_out){
             v_out.resize(vec_size - 1);
 
         for(size_t i = 0; i < vec_size - 1; ++i){
-            v_out[i] = (T)(v_in[i+1] - v_in[i]);
+            v_out[i] = (v_in[i+1] - v_in[i]);
         }
     }
 }
