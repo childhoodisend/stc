@@ -22,7 +22,7 @@ int main(){
 //    test::test2();
 //    test::test3();
 //    test::test4();
-//    test::test5();
+    test::test5();
 
 
     return EXIT_SUCCESS;

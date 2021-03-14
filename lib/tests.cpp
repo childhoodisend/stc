@@ -36,9 +36,9 @@ void test::test1(){
 
 
     // Проверяем, что соответствующие значения совпадают с заранее заданным checker::EPS
-    if(checher::check<float>(v_out, v_diff)){
+    if(checher::check_result<float>(v_out, v_diff)){
         std::cout << "Success! " << std::endl;
-        //    print::print_T(v_diff);
+        //    printer::print_T(v_diff);
     }
 
 }
@@ -59,7 +59,7 @@ void test::test2() {
 
     if(checher::check_IQF(v_out, v_out_rect)){
         std::cout << "Success! " << std::endl;
-        //    print::print_IQF(v_out_rect);
+        //    printer::print_IQF(v_out_rect);
     }
 
 
@@ -80,7 +80,7 @@ void test::test3() {
 
     if(checher::check_IQF(v_out, v_out_psk)){
         std::cout << "Success! " << std::endl;
-        //    print::print_IQF(v_out_psk);
+        //    printer::print_IQF(v_out_psk);
     }
 
 }
@@ -120,8 +120,10 @@ void test::test5() {
     std::vector<size_t> idx;
     find_local_peaks(v_in, idx, len_win, level);
 
-//    if(checher::check(idx_in, idx)){
+    checher::check_idx(v_in, idx, idx_in);
+
+//    if(checher::check_result(idx, idx_in)){
 //        std::cout << "Success! " << std::endl;
-//        //    print::print_T<size_t>(idx);
+//        //    printer::print_T<size_t>(idx);
 //    }
 }
