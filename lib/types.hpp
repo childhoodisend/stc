@@ -34,5 +34,10 @@ public:
     float i{}, q{};
 };
 
+template<typename T>
+struct IQ{
+public:
+    T i{}, Q{};
+};
 
 #endif //STC_TYPES_HPP

@@ -5,18 +5,18 @@
 #include <vector>
 #include <algorithm>
 
-#include <file_puts.hpp>
+#include <file_lib/file_puts.hpp>
 
-#include <count_more_than/count_more_than.hpp>
-#include <diff/diff.hpp>
-#include <find_local_peaks/find_local_peaks.hpp>
-#include <psk_mod/psk_mod.hpp>
-#include <rectpulse/rectpulse.hpp>
+#include <tasks/count_more_than/count_more_than.hpp>
+#include <tasks/diff/diff.hpp>
+#include <tasks/find_local_peaks/find_local_peaks.hpp>
+#include <tasks/psk_mod/psk_mod.hpp>
+#include <tasks/rectpulse/rectpulse.hpp>
 
-#include "tests.hpp"
+#include "tasks/tests.hpp"
 
 #include <print.hpp>
-#include <checker.hpp>
+#include <tasks/checker.hpp>
 
 /*
  * Тесты для тасков 1-5
