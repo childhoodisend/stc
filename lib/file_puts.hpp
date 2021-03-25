@@ -5,7 +5,7 @@
 #ifndef STC_FILE_PUTS_HPP
 #define STC_FILE_PUTS_HPP
 
-#include<types.hpp>
+#include <types.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -14,6 +14,9 @@
 /*
  * Функции считывания и записи в бинарные файлы
  */
+
+using namespace types;
+
 namespace file {
 
     template<typename T>

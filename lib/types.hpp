@@ -7,37 +7,45 @@
 
 #include <cmath>
 
-struct IQF{
-public:
-    IQF(float i1, float q1) : i(i1), q(q1){
-        compute_theta();
+namespace types {
+    struct IQF {
+    public:
+        IQF(float i1, float q1) : i(i1), q(q1) {
+            compute_theta();
+        };
+
+        explicit IQF(float theta1) : theta(theta1) {
+            i = cosf(theta1);
+            q = sinf(theta1);
+        };
+
+        IQF() = default;
+
+        ~IQF() = default;
+
+        void compute_theta() {
+            if (i == 0.0f && q < 0)
+                theta = (float) M_PI;
+            else
+                theta = atan2f(q, i);
+        }
+
+
+    public:
+        float theta{};
+        float i{}, q{};
     };
 
-    explicit IQF(float theta1) : theta(theta1){
-        i = cosf(theta1);
-        q = sinf(theta1);
+    template<typename T>
+    struct IQ {
+    public:
+        T i{}, q{};
     };
 
-    IQF() = default;
-    ~IQF() = default;
-
-    void compute_theta(){
-        if (i == 0.0f && q < 0)
-            theta = (float) M_PI;
-        else
-            theta = atan2f(q, i);
-    }
-
-
-public:
-    float theta{};
-    float i{}, q{};
-};
-
-template<typename T>
-struct IQ{
-public:
-    T i{}, Q{};
-};
-
+    template<typename T>
+    struct LR{
+    public:
+        T l{}, r{};
+    };
+}
 #endif //STC_TYPES_HPP

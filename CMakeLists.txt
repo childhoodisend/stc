@@ -13,7 +13,7 @@ add_executable(stc
         lib/tasks/count_more_than/count_more_than.hpp
         lib/tasks/find_local_peaks/find_local_peaks.hpp
 #        File input output
-        lib/file_lib/file_puts.hpp
+        lib/file_puts.hpp
 #        Types(IQF)
         lib/types.hpp
 #        Tests(1..5)
@@ -25,5 +25,4 @@ add_executable(stc
         lib/tasks/checker.hpp
 
 #        Wav files lib
-        lib/wave_lib/wave.cpp
-        lib/wave_lib/wave.h)
+        lib/wave_lib/wave.hpp lib/print.cpp)
