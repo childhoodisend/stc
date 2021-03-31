@@ -14,7 +14,10 @@
 
 //#include <types.hpp>
 //#include <file_puts.hpp>
-#include <tests.hpp>
+//#include <tasks/tests.hpp>
+
+
+#include <wave_lib/wave.hpp>
 
 
 int main(){
@@ -22,8 +25,15 @@ int main(){
 //    test::test2();
 //    test::test3();
 //    test::test4();
-    test::test5();
+//    test::test5();
 
+
+    wave_format w;
+    w.wav_reader();
+//    w.print_data();
+    w.print_header_info();
+
+    w.print_info();
 
     return EXIT_SUCCESS;
 }

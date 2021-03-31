@@ -15,6 +15,7 @@
  * путем применения метода и вектора из файла *v_out*
  */
 
+using namespace types;
 
 namespace checher{
 
