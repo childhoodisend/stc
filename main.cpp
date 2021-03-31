@@ -28,10 +28,10 @@ int main(){
 //    test::test5();
 
 
-    wave_format<int32_t> w;
+    wave_format w;
     w.wav_reader();
-    w.print_data();
-//    w.print_all_info();
+//    w.print_data();
+    w.print_header_info();
 
     w.print_info();
 

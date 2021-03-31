@@ -66,26 +66,43 @@ struct wave_header{ // Main header, containing all of the parts above
     data_subchunk data{};
 };
 
-template<typename T>
+
 struct wave_format{
 public:
     wave_format()   = default;
     ~wave_format()  = default;
 
+/*
+ * -----Interface-----
+ */
+    void wav_reader();              // Read  WAVE file
+    void print_info()        const; // Printing main info about WAVE file
+    void print_header_info() const; // Printing header info of WAVE file
+    void print_data();              // Printing data of WAVE file
 
-    void wav_reader();
-    void print_info()     const;
-    void print_all_info() const;
-    void print_data()     const;
+//    void wav_saver(std::string &fout); // Save WAVE to file
+ /*
+ * ~~~~~Interface~~~~~
+ */
 
-private: // Methods
+private: // Private methods
     void get_header();
     void get_data();
-    void get_one_channel();
-    void get_two_channels();
+
+    template<typename T>
+    void get_one_channel(std::vector<T> &data);
+
+    template<typename T>
+    void get_two_channels(std::vector<LR<T>> &data_LR);
+
+    template<typename T>
+    void printer(const std::vector<T> &data) const;
+
+    template<typename T>
+    void printer(const std::vector<LR<T>> &data_LR) const;
 
 private: // Work with files
-    const std::string file_input  = "../source/Wave/brat2_96.wav";
+    const std::string file_input  = "../source/Wave/TestWAV.wav";
     const std::string file_output = "../source/Wave/output.bin";
     std::fstream fin;
     std::ofstream fout;
@@ -93,8 +110,18 @@ private: // Work with files
 private:
     size_t              HEADERSIZE{};
     wave_header         header{};
-    std::vector<T>      data{};
-    std::vector<LR<T>>  data_LR{};
+
+    std::vector<int8_t>      data_i8{};
+    std::vector<LR<int8_t>>  data_LR_i8{};
+
+    std::vector<int16_t>     data_i16{};
+    std::vector<LR<int16_t>> data_LR_i16{};
+
+    std::vector<int32_t>     data_i32{};
+    std::vector<LR<int32_t>> data_LR_i32{};
+
+    std::vector<float>       data_f{};
+    std::vector<LR<float>>   data_LR_f{};
 };
 
 
@@ -102,8 +129,8 @@ private:
  *  Реализация функций
  */
 
-template<typename T>
-void wave_format<T>::wav_reader() { // Read WAV file!
+
+void wave_format::wav_reader() { // Read WAV file!
     get_header(); // Firstly, read the header
     get_data();   // Secondly, read the data after the header
 }
@@ -111,8 +138,8 @@ void wave_format<T>::wav_reader() { // Read WAV file!
 /*
  * -----Getting WAV header-----
  */
-template<typename T>
-void wave_format<T>::get_header() {
+
+void wave_format::get_header() {
 
     fin.open(file_input, std::ios_base::binary | std::ios_base::in);
 
@@ -157,7 +184,7 @@ void wave_format<T>::get_header() {
  */
 
 template<typename T>
-void wave_format<T>::get_one_channel() { // In case of 1 channel
+void wave_format::get_one_channel(std::vector<T> &data) { // In case of 1 channel
     fin.open(file_input, std::ios_base::binary | std::ios_base::in);
     if (fin.is_open()) {
         if (HEADERSIZE) {
@@ -170,9 +197,8 @@ void wave_format<T>::get_one_channel() { // In case of 1 channel
     }
 }
 
-//TODO
 template<typename T>
-void wave_format<T>::get_two_channels() { // In case of 2 channels
+void wave_format::get_two_channels(std::vector<LR<T>> &data_LR) { // In case of 2 channels
     fin.open(file_input, std::ios_base::binary | std::ios_base::in);
     if (fin.is_open()) {
 
@@ -195,18 +221,66 @@ void wave_format<T>::get_two_channels() { // In case of 2 channels
     }
 }
 
-template<typename T>
-void wave_format<T>::get_data() {
-    switch (header.fmt.numChannels) {
-        case 1:
-            get_one_channel(); // In case of 1 channel
-            break;
-        case 2:
-            get_two_channels(); // In case of 2 channels
-            break;
 
-        default:
+void wave_format::get_data() {
+    if (header.fmt.numChannels == 1) {
+        if(header.fmt.audioFormat == 1) { // If PCM
+            if (header.fmt.bitsPerSample == 8) { // If int8_t
+                std::cout << "Getting int8_t data, 1 channel...\n\n";
+                get_one_channel(data_i8);
+            }
+
+            if (header.fmt.bitsPerSample == 16) { // If int16_t
+                std::cout << "Getting int16_t data, 1 channel...\n\n";
+                get_one_channel(data_i16);
+            }
+
+            if (header.fmt.bitsPerSample == 32) { // If int32_t
+                std::cout << "Getting int32_t data, 1 channel...\n\n";
+                get_one_channel(data_i32);
+            }
+        }
+        else {
+            if (header.fmt.audioFormat == 3) { // If IEEE float
+                std::cout << "Getting float data, 1 channel...\n\n";
+                get_one_channel(data_f);
+            }
+            else {
+                throw std::runtime_error("Error! One channel, but audioFormat is not PCM or IEEE float!\n");
+            }
+        }
+    }
+    else {
+        if (header.fmt.numChannels == 2) {
+            if(header.fmt.audioFormat == 1) { // If PCM
+                if (header.fmt.bitsPerSample == 8) { // If int8_t
+                    std::cout << "Getting int8_t data, 2 channels...\n\n";
+                    get_two_channels(data_LR_i8);
+                }
+
+                if (header.fmt.bitsPerSample == 16) { // If int16_t
+                    std::cout << "Getting int16_t data, 2 channels...\n\n";
+                    get_two_channels(data_LR_i16);
+                }
+
+                if (header.fmt.bitsPerSample == 32) { // If int32_t
+                    std::cout << "Getting int32_t data, 2 channels...\n\n";
+                    get_two_channels(data_LR_i32);
+                }
+            }
+            else {
+                if (header.fmt.audioFormat == 3) { // If IEEE float
+                    std::cout << "Getting float data, 2 channels...\n\n";
+                    get_one_channel(data_LR_f);
+                }
+                else {
+                    throw std::runtime_error("Error! Two channels, but audioFormat is not PCM or IEEE float!\n");
+                }
+            }
+        }
+        else {
             throw std::runtime_error("Error! More than 2 channels!\n");
+        }
     }
 }
 /*
@@ -217,14 +291,16 @@ void wave_format<T>::get_data() {
 /*
  * ------Printing info about WAV file-----
  */
-template<typename T>
-void wave_format<T>::print_info() const {
+
+void wave_format::print_info() const {
+
     std::cout << "Size of the file  -> " << header.riff.chunkSize       << " bytes" << std::endl;
     std::cout << "Channels          -> " << header.fmt.numChannels      << std::endl;
     std::cout << "Sample rate       -> " << header.fmt.sampleRate       << " Hz"    << std::endl;
     std::cout << "Bits per sample   -> " << header.fmt.bitsPerSample    << " bit"   << std::endl;
-    //TODO
-    std::cout << "Type of the data  -> " << typeid(T).name()            << std::endl;
+
+    std::string name = (header.fmt.audioFormat == 1 ? "INT" : (header.fmt.audioFormat == 3 ? "FLOAT" : "BADTYPE"));
+    std::cout << "Type of the data  -> " <<   name   << std::endl;
 
     float numSamples = (header.riff.chunkSize - HEADERSIZE) / (header.fmt.numChannels * header.fmt.bitsPerSample / 8);
     uint32_t SR = header.fmt.sampleRate;
@@ -232,8 +308,8 @@ void wave_format<T>::print_info() const {
     std::cout << "Duration          -> " << numSamples / SR << " s"     << std::endl;
 }
 
-template<typename T>
-void wave_format<T>::print_all_info() const {
+
+void wave_format::print_header_info() const {
     std::cout << "RIFF HEADER" << std::endl; // RIFF info
     std::cout << "chunkID       -> " << header.riff.chunkID[0]
               << header.riff.chunkID[1]
@@ -304,31 +380,33 @@ void wave_format<T>::print_all_info() const {
     std::cout << std::endl;
 }
 
+
+
+
 template<typename T>
-void wave_format<T>::print_data() const {
-    if(!data.empty() && !data_LR.empty()) // Вдруг, оба вектора не пустые 0_о
-        throw std::runtime_error("!data.empty() && !data_LR.empty()\n");
-
-    if(!data.empty()) {
-        if (std::is_same<T, int32_t>::value || std::is_same<T, float>::value) {
-            for (const auto &i: data) {
-                std::cout << i << std::endl;
-            }
-        }
-        else {
-            throw std::runtime_error("Error! Bad type T!\n");
-        }
-    } else {
-
-        if (!data_LR.empty()) {
-            for (const auto &j: data_LR) {
-                std::cout << "l: " << j.l << " r: " << j.r << std::endl;
-            }
-        } else
-            throw std::runtime_error("Error! Data is empty!\n");
+void wave_format::printer(const std::vector<T> &data) const{
+    for (const auto &i: data) {
+        std::cout << i << std::endl;
     }
 }
 
+template<typename T>
+void wave_format::printer(const std::vector<LR<T>> &data_LR) const{
+    for (const auto &j: data_LR) {
+        std::cout << "l: " << j.l << " r: " << j.r << std::endl;
+    }
+}
+
+void wave_format::print_data(){
+    if(!data_i8.empty())     printer(data_i8);
+    if(!data_LR_i8.empty())  printer(data_LR_i8);
+    if(!data_i16.empty())    printer(data_i16);
+    if(!data_LR_i16.empty()) printer(data_LR_i16);
+    if(!data_i32.empty())    printer(data_i32);
+    if(!data_LR_i32.empty()) printer(data_LR_i32);
+    if(!data_f.empty())      printer(data_f);
+    if(!data_LR_f.empty())   printer(data_LR_f);
+}
 
 /*
  * ~~~~~Printing info about WAV file~~~~~
